@@ -121,12 +121,13 @@ export default class RectGenerator {
 
         if (this.currHoverRect && this.currHoverRect !== rectToHover) {
             this.currHoverRect.setHover(false);
-            this.currHoverRect = null;
         }
 
         if (rectToHover) {
-            rectToHover.setHover(true);
             this.currHoverRect = rectToHover;
+            rectToHover.setHover(true);
+        } else {
+            this.currHoverRect = null;
         }
     }
 
