@@ -1,78 +1,169 @@
+import {EditableRect} from "./editableRect";
+
 export default class RectGenerator {
     private container: HTMLElement;
-    private isDragStarted: boolean;
-    private isDragging: boolean;
+    private isDrawStarted: boolean;
+    private isDrawing: boolean;
     private startX: number;
     private startY: number;
     private currentX: number;
     private currentY: number;
-    private rectList: Rect[];
+    private rectList: EditableRect[] = [];
+    private isMoving: boolean;
+    private currHoverRect: EditableRect | null;
+    private currEditRect: EditableRect | null;
+    private movingRectDeltaX: number;
+    private movingRectDeltaY: number;
 
     constructor(container: HTMLElement) {
         this.container = container;
-        this.rectList = [];
         this.listen();
     }
 
     listen() {
         document.addEventListener('keydown', this.onKeydown.bind(this));
-        this.container.addEventListener('click', this.onClick.bind(this));
         this.container.addEventListener('mousedown', this.onMouseDown.bind(this));
         this.container.addEventListener('mousemove', this.onMouseMove.bind(this));
         this.container.addEventListener('mouseup', this.onMouseUp.bind(this));
     }
 
-    onClick() {
-
+    onKeydown(event: KeyboardEvent) {
+        switch (event.code) {
+            case 'Backspace':
+            case 'Delete':
+                return this.onPressDelete();
+            case 'Escape':
+                return this.stopEdit();
+        }
     }
 
-    onKeydown() {
-
-    }
-
-    onMouseDown(event: DragEvent) {
+    onMouseDown(event: MouseEvent) {
         const x = event.offsetX;
         const y = event.offsetY;
-        const rect = this.findRect(x, y);
 
-        if (rect) {
-            this.selectRect(rect);
+        this.startX = x;
+        this.startY = y;
+
+        if (this.currEditRect && this.currEditRect.hasPoint(x, y)) {
+            this.isMoving = true;
+            this.movingRectDeltaX = x - this.currEditRect.x;
+            this.movingRectDeltaY = y - this.currEditRect.y;
+        } else {
+            this.isDrawStarted = true;
+            this.isDrawing = false;
+        }
+    }
+
+    onMouseMove(event: MouseEvent) {
+        const x = event.offsetX;
+        const y = event.offsetY;
+
+        if (this.isMoving) {
+            this.moveRect(x, y);
+        } else if (this.isDrawStarted) {
+            this.isDrawing = true;
+            this.currentX = x;
+            this.currentY = y;
+            this.stopEdit();
+        } else {
+            this.processHover(x, y);
+        }
+    }
+
+    onMouseUp(event: MouseEvent) {
+        if (this.isDrawing) {
+            this.finishDrawRect();
+        } else {
+            const x = event.offsetX;
+            const y = event.offsetY;
+
+            if (x === this.startX && y === this.startY) {
+                this.onClickPoint(x, y);
+            }
+        }
+
+        this.isDrawStarted = false;
+        this.isDrawing = false;
+        this.isMoving = false;
+    }
+
+    onClickPoint(x: number, y: number) {
+        if (this.currEditRect && this.currEditRect.hasPoint(x, y)) {
             return;
         }
 
-        this.isDragStarted = true;
-        this.isDragging = false;
-        this.startX = x;
-        this.startY = y;
-    }
+        const rect = this.findRect(x, y);
 
-    onMouseMove(event: DragEvent) {
-        if (this.isDragStarted) {
-            this.isDragging = true;
-            this.currentX = event.offsetX;
-            this.currentY = event.offsetY;
+        if (rect) {
+            this.startEdit(rect);
+        } else {
+            this.stopEdit();
         }
     }
 
-    onMouseUp(event: DragEvent) {
-        if (this.isDragging) {
-            this.finishRect();
+    onPressDelete() {
+        if (this.currEditRect) {
+            const index = this.rectList.indexOf(this.currEditRect);
+
+            this.rectList.splice(index, 1);
+        }
+    }
+
+    moveRect(x: number, y: number) {
+        this.currEditRect?.setPosition(
+            x - this.movingRectDeltaX,
+            y - this.movingRectDeltaY
+        );
+    }
+
+    processHover(x: number, y: number) {
+        const rectToHover = this.findHoverableRect(x, y);
+
+        if (this.currHoverRect && this.currHoverRect !== rectToHover) {
+            this.currHoverRect.setHover(false);
+            this.currHoverRect = null;
         }
 
-        this.isDragStarted = false;
-        this.isDragging = false;
+        if (rectToHover) {
+            rectToHover.setHover(true);
+            this.currHoverRect = rectToHover;
+        }
+    }
+
+    findHoverableRect(x: number, y: number): EditableRect | undefined {
+        if (this.currEditRect?.hasPoint(x, y)) {
+            return this.currEditRect;
+        }
+
+        return this.findRect(x, y);
     }
 
     findRect(x: number, y: number) {
         return this.rectList.find(rect => rect.hasPoint(x, y));
     }
 
-    finishRect() {
+    finishDrawRect() {
         const {x, y, w, h} = this.getCurrentRect();
 
         if (w > 0 || h > 0) {
-            this.rectList.push(new Rect(x, y, w, h));
+            this.rectList.push(new EditableRect(x, y, w, h));
+            this.startEdit(this.rectList[this.rectList.length - 1]);
         }
+    }
+
+    startEdit(rect: EditableRect) {
+        if (rect === this.currEditRect) {
+            return;
+        }
+
+        this.currEditRect?.setIsEditing(false);
+        this.currEditRect = rect;
+        this.currEditRect.setIsEditing(true);
+    }
+
+    stopEdit() {
+        this.currEditRect?.setIsEditing(false);
+        this.currEditRect = null;
     }
 
     getCurrentRect() {
@@ -86,19 +177,17 @@ export default class RectGenerator {
 
     draw(ctx: CanvasRenderingContext2D) {
         this.drawRectList(ctx);
-        this.drawCurrentRect(ctx);
+        this.drawCurrentDrawRect(ctx);
     }
 
     drawRectList(ctx: CanvasRenderingContext2D) {
-        ctx.fillStyle = 'rgb(14, 209, 255, .4)';
-
-        this.rectList.forEach(({x, y, w, h}) => {
-            ctx.fillRect(x, y, w, h);
+        this.rectList.forEach(rect => {
+            rect.draw(ctx);
         });
     }
 
-    drawCurrentRect(ctx: CanvasRenderingContext2D) {
-        if (!this.isDragging) {
+    drawCurrentDrawRect(ctx: CanvasRenderingContext2D) {
+        if (!this.isDrawing) {
             return;
         }
 
@@ -106,30 +195,5 @@ export default class RectGenerator {
 
         ctx.fillStyle = 'rgb(255, 239, 34, .4)';
         ctx.fillRect(x, y, w, h);
-    }
-
-    selectRect(rect: Rect) {
-        console.log(rect);
-    }
-}
-
-class Rect {
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-
-    constructor(x: number, y: number, w: number, h: number) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-    }
-
-    hasPoint(x: number, y: number) {
-        return (
-            x >= this.x && x <= this.x + this.w &&
-            y >= this.y && y <= this.y + this.h
-        );
     }
 }
