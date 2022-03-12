@@ -44,7 +44,7 @@ export default class RectGenerator {
         this.startX = x;
         this.startY = y;
 
-        if (this.currEditRect && this.currEditRect.hasPoint(x, y)) {
+        if (this.currEditRect?.hasPoint(x, y)) {
             this.isMoving = true;
             this.movingRectDeltaX = x - this.currEditRect.x;
             this.movingRectDeltaY = y - this.currEditRect.y;
@@ -88,7 +88,7 @@ export default class RectGenerator {
     }
 
     onClickPoint(x: number, y: number) {
-        if (this.currEditRect && this.currEditRect.hasPoint(x, y)) {
+        if (this.currEditRect?.hasPoint(x, y)) {
             return;
         }
 
