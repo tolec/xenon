@@ -44,6 +44,10 @@ export default class RectGenerator {
         this.startX = x;
         this.startY = y;
 
+        if (this.currEditRect?.isResizing(x, y)) {
+            return;
+        }
+
         if (this.currEditRect?.hasPoint(x, y)) {
             this.isMoving = true;
             this.movingRectDeltaX = x - this.currEditRect.x;
@@ -106,6 +110,7 @@ export default class RectGenerator {
             const index = this.rectList.indexOf(this.currEditRect);
 
             this.rectList.splice(index, 1);
+            this.currEditRect = null;
         }
     }
 
@@ -147,7 +152,7 @@ export default class RectGenerator {
         const {x, y, w, h} = this.getCurrentRect();
 
         if (w > 0 || h > 0) {
-            this.rectList.push(new EditableRect(x, y, w, h));
+            this.rectList.push(new EditableRect(x, y, w, h, this.container));
             this.startEdit(this.rectList[this.rectList.length - 1]);
         }
     }

@@ -32,6 +32,11 @@ export class Rect {
         this._y = y;
     }
 
+    setSize(w: number, h: number) {
+        this._w = w;
+        this._h = h;
+    }
+
     hasPoint(x: number, y: number) {
         return (
             x >= this._x && x <= this._x + this._w &&

@@ -41,8 +41,6 @@ export default class Ship {
 
     addEventListeners() {
         document.addEventListener('keydown', (event) => {
-            // console.log(event.code);
-
             switch (event.code) {
                 case 'ArrowLeft':
                     this.addMove(this.moveX, -1);
