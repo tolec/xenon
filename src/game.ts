@@ -2,6 +2,7 @@ import Ship from "./ship";
 import Collisions from "./collisions";
 import EnemyGenerator from "./enemyGenerator";
 import StarrySky from "./starrySky";
+import Walls from "./walls";
 
 export default class Game {
     public width: number;
@@ -13,6 +14,7 @@ export default class Game {
     private enemyInterval: number;
     private enemyGenerator: EnemyGenerator;
     private starrySky: StarrySky;
+    private walls: Walls;
 
     constructor(width: number, height: number) {
         this.width = width;
@@ -24,6 +26,7 @@ export default class Game {
         this.collisions = new Collisions(this);
         this.enemyGenerator = new EnemyGenerator(this);
         this.starrySky = new StarrySky(this);
+        this.walls = new Walls(this);
     }
 
     update(delta: number) {
@@ -33,10 +36,12 @@ export default class Game {
         this.collisions.detectCollisions(this.enemyGenerator.enemies, [...this.ship.bullets, this.ship]);
         this.enemyGenerator.update(delta);
         this.starrySky.update(delta);
+        this.walls.update(delta);
     }
 
     draw(ctx: CanvasRenderingContext2D) {
         this.starrySky.draw(ctx);
+        this.walls.draw(ctx);
         this.enemyGenerator.draw(ctx);
         this.ship.draw(ctx);
 

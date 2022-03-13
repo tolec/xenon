@@ -10,7 +10,7 @@ export default class StarrySky {
 
     constructor(game: Game) {
         this.game = game;
-        this.skySpeed = 20;
+        this.skySpeed = 10;
         this.starsPer100x100 = 5;
         this.stars = [];
 

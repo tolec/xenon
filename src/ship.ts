@@ -17,7 +17,7 @@ export default class Ship {
     public bullets: Bullet[];
     public isOver: boolean;
     private timeFromLastShoot: number;
-    private image: HTMLImageElement;
+    private image?: HTMLImageElement;
 
     public moveX: MoveArray;
     public moveY: MoveArray;

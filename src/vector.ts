@@ -1,23 +1,8 @@
-export class Vector {
-    public x: number;
-    public y: number;
+import {Position} from "./position";
 
-    constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
-    }
-
-    clone() {
-        return new Vector(this.x, this.y);
-    }
-
+export class Vector extends Position {
     length() {
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
-    }
-
-    add(vector: Vector) {
-        this.x += vector.x;
-        this.y += vector.y;
     }
 
     multiply(value: number) {
@@ -45,9 +30,5 @@ export class Vector {
             this.x *= ratio;
             this.y *= ratio;
         }
-    }
-
-    toString() {
-        return `[${this.x.toFixed(1)}, ${this.y.toFixed(1)}}`;
     }
 }

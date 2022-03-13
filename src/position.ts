@@ -21,4 +21,9 @@ export class Position {
     clone() {
         return new Position(this.x, this.y);
     }
+
+    toInteger() {
+        this.x = Math.round(this.x);
+        this.y = Math.round(this.y);
+    }
 }

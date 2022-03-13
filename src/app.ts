@@ -4,9 +4,11 @@ import RectGenerator from "./rectGenerator";
 
 const canvas = document.getElementById('game') as HTMLCanvasElement;
 const gameWrap = document.getElementById('game-wrap') as HTMLElement;
-const ctx = canvas.getContext('2d');
 const GAME_WIDTH = 800;
 const GAME_HEIGHT = 640;
+
+const ctx = canvas.getContext('2d', {alpha: false})!;
+ctx.imageSmoothingEnabled = false;
 
 const game = new Game(GAME_WIDTH, GAME_HEIGHT);
 let deltaTime = 0;
@@ -32,7 +34,7 @@ function gameLoop(timeStamp) {
 
     // ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
-    ctx.fillStyle = '#012';
+    ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
     game.update(deltaTime);
