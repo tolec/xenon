@@ -1,4 +1,4 @@
-export default class PathGenerator {
+export default class PathDrawer {
     private container: HTMLElement;
     private points: Point[];
     private currentPoint: number;

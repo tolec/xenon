@@ -1,6 +1,5 @@
 import Game from "./game";
 import Ship from './ship';
-import Walls from './walls';
 
 interface Rect {
     position: { x: number, y: number },
@@ -17,7 +16,7 @@ export default class Collisions {
 
     }
 
-    detectCollisions(ship: Ship, walls: Walls, enemies: Rect[], bullets: Rect[]) {
+    detectCollisions(ship: Ship, enemies: Rect[], bullets: Rect[]) {
         for (const enemy of enemies) {
             if (this.isCollision(enemy, ship)) {
                 console.log('ship into enemy');

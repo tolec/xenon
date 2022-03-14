@@ -1,6 +1,6 @@
 import Game from "./game";
 
-export default class Walls {
+export default class Wall {
     public position: number;
     private game: Game;
     private image?: HTMLImageElement;

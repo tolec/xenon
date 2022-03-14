@@ -2,9 +2,9 @@ import Ship from "./ship";
 import Collisions from "./collisions";
 import EnemyGenerator from "./enemyGenerator";
 import StarrySky from "./starrySky";
-import Walls from "./walls";
-import PathGenerator from "./pathGenerator";
-import RectGenerator from "./rectGenerator";
+import Wall from "./wall";
+import PathDrawer from "./pathDrawer";
+import RectDrawer from "./rectDrawer";
 
 type Mode = 'play' | 'rect-editor' | 'path-editor';
 
@@ -19,10 +19,10 @@ export default class Game {
     private enemyInterval: number;
     private enemyGenerator: EnemyGenerator;
     private starrySky: StarrySky;
-    private walls: Walls;
+    private wall: Wall;
     private canvas: HTMLCanvasElement;
-    private pathGenerator: PathGenerator;
-    private rectGenerator: RectGenerator;
+    private pathDrawer: PathDrawer;
+    private rectDrawer: RectDrawer;
 
     constructor(width: number, height: number, canvas: HTMLCanvasElement) {
         this.width = width;
@@ -34,11 +34,11 @@ export default class Game {
         this.collisions = new Collisions(this);
         this.enemyGenerator = new EnemyGenerator(this);
         this.starrySky = new StarrySky(this);
-        this.walls = new Walls(this);
+        this.wall = new Wall(this);
 
         this.canvas = canvas;
-        this.pathGenerator = new PathGenerator(canvas);
-        this.rectGenerator = new RectGenerator(this, canvas);
+        this.pathDrawer = new PathDrawer(canvas);
+        this.rectDrawer = new RectDrawer(this, canvas);
 
         this.listen();
     }
@@ -68,10 +68,10 @@ export default class Game {
         switch (this.mode) {
             case 'play':
                 this.ship.update(delta);
-                this.collisions.detectCollisions(this.ship, this.walls, this.enemyGenerator.enemies, this.ship.bullets);
+                this.collisions.detectCollisions(this.ship, this.enemyGenerator.enemies, this.ship.bullets);
                 this.enemyGenerator.update(delta);
                 this.starrySky.update(delta);
-                this.walls.update(delta);
+                this.wall.update(delta);
                 break;
         }
     }
@@ -80,15 +80,15 @@ export default class Game {
         switch (this.mode) {
             case 'play':
                 this.starrySky.draw(ctx);
-                this.walls.draw(ctx);
+                this.wall.draw(ctx);
                 this.enemyGenerator.draw(ctx);
                 this.ship.draw(ctx);
                 break;
             case 'rect-editor':
-                this.rectGenerator.draw(ctx);
+                this.rectDrawer.draw(ctx);
                 break;
             case 'path-editor':
-                this.pathGenerator.draw(ctx);
+                this.pathDrawer.draw(ctx);
                 break;
         }
 

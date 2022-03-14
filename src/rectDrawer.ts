@@ -1,11 +1,11 @@
 import {EditableRect} from "./editableRect";
 import Game from "./game";
-import Walls from "./walls";
+import Wall from "./wall";
 
-export default class RectGenerator {
+export default class RectDrawer {
     private game: Game;
     private container: HTMLElement;
-    private walls: Walls;
+    private wall: Wall;
     private isDrawStarted: boolean;
     private isDrawing: boolean;
     private startX: number;
@@ -22,7 +22,7 @@ export default class RectGenerator {
     constructor(game: Game, container: HTMLElement) {
         this.game = game;
         this.container = container;
-        this.walls = new Walls(game);
+        this.wall = new Wall(game);
         this.restoreRectList();
         this.listen();
     }
@@ -52,12 +52,12 @@ export default class RectGenerator {
     }
 
     getOrigImageRectList() {
-        const image = this.walls.getImage();
+        const image = this.wall.getImage();
         const scale = this.game.width / image.width;
 
         return this.rectList.map(rect => {
             const x = rect.x / scale;
-            const y = rect.y / scale + this.walls.position;
+            const y = rect.y / scale + this.wall.position;
             const w = rect.w / scale;
             const h = rect.h / scale;
 
@@ -66,12 +66,12 @@ export default class RectGenerator {
     }
 
     mapOrigToGameRectList(percentRectList: Array<{ x: number, y: number, w: number, h: number }>) {
-        const image = this.walls.getImage();
+        const image = this.wall.getImage();
         const scale = this.game.width / image.width;
 
         return percentRectList.map(rect => {
             const x = Math.round(rect.x * scale);
-            const y = Math.round((rect.y - this.walls.position) * scale);
+            const y = Math.round((rect.y - this.wall.position) * scale);
             const w = Math.round(rect.w * scale);
             const h = Math.round(rect.h * scale);
 
@@ -262,7 +262,7 @@ export default class RectGenerator {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
-        this.walls.draw(ctx);
+        this.wall.draw(ctx);
         this.drawRectList(ctx);
         this.drawCurrentDrawRect(ctx);
     }
