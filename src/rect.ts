@@ -1,10 +1,17 @@
+interface RectProps {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+}
+
 export class Rect {
     private _x: number;
     private _y: number;
     private _w: number;
     private _h: number;
 
-    constructor(x: number, y: number, w: number, h: number) {
+    constructor({x, y, w, h}: RectProps) {
         this._x = x;
         this._y = y;
         this._w = w;

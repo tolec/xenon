@@ -1,6 +1,10 @@
 import {Position} from "./position";
 
 export class Vector extends Position {
+    clone() {
+        return new Vector(this.x, this.y);
+    }
+
     length() {
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
     }

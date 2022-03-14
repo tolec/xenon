@@ -8,4 +8,6 @@ body {
 
 #game {
     image-rendering: pixelated;
+    tab-index: 1;
+    outline: none;
 }

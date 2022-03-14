@@ -1,23 +1,18 @@
 import Game from "./game";
-import PathGenerator from "./pathGenerator";
-import RectGenerator from "./rectGenerator";
 
 const canvas = document.getElementById('game') as HTMLCanvasElement;
-const gameWrap = document.getElementById('game-wrap') as HTMLElement;
-const GAME_WIDTH = 800;
-const GAME_HEIGHT = 640;
+const GAME_WIDTH = canvas.width;
+const GAME_HEIGHT = canvas.height;
 
 const ctx = canvas.getContext('2d', {alpha: false})!;
 ctx.imageSmoothingEnabled = false;
 
-const game = new Game(GAME_WIDTH, GAME_HEIGHT);
+const game = new Game(GAME_WIDTH, GAME_HEIGHT, canvas);
+
 let deltaTime = 0;
 let oldTimeStamp = 0;
 
 const startTime = Date.now();
-
-const pathGenerator = new PathGenerator(gameWrap);
-const rectGenerator = new RectGenerator(gameWrap);
 
 function requestLoop(loopCallback) {
     requestAnimationFrame(loopCallback);
@@ -39,9 +34,6 @@ function gameLoop(timeStamp) {
 
     game.update(deltaTime);
     game.draw(ctx);
-
-    // pathGenerator.draw(ctx);
-    rectGenerator.draw(ctx);
 
     requestLoop(gameLoop);
 }

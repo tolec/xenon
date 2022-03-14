@@ -9,6 +9,10 @@ export class Position {
         this.y = y;
     }
 
+    clone() {
+        return new Position(this.x, this.y);
+    }
+
     add(vector: Vector) {
         this.x += vector.x;
         this.y += vector.y;
@@ -16,10 +20,6 @@ export class Position {
 
     toString() {
         return `[${this.x.toFixed(1)}, ${this.y.toFixed(1)}}`;
-    }
-
-    clone() {
-        return new Position(this.x, this.y);
     }
 
     toInteger() {

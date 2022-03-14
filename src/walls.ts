@@ -30,7 +30,7 @@ export default class Walls {
     draw(ctx: CanvasRenderingContext2D) {
         const image = this.getImage();
         const scale = this.game.width / image.width;
-        const imageCropHeight = this.game.height / scale;
+        const imageCropHeight = Math.round(this.game.height / scale);
 
         ctx.drawImage(
             image,

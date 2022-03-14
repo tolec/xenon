@@ -1,7 +1,11 @@
 import {EditableRect} from "./editableRect";
+import Game from "./game";
+import Walls from "./walls";
 
 export default class RectGenerator {
+    private game: Game;
     private container: HTMLElement;
+    private walls: Walls;
     private isDrawStarted: boolean;
     private isDrawing: boolean;
     private startX: number;
@@ -15,9 +19,68 @@ export default class RectGenerator {
     private movingRectDeltaX: number;
     private movingRectDeltaY: number;
 
-    constructor(container: HTMLElement) {
+    constructor(game: Game, container: HTMLElement) {
+        this.game = game;
         this.container = container;
+        this.walls = new Walls(game);
+        this.restoreRectList();
         this.listen();
+    }
+
+    storeRectList() {
+        localStorage.setItem('rectList', JSON.stringify(this.getOrigImageRectList()));
+    }
+
+    restoreRectList() {
+        const rectListStr = localStorage.getItem('rectList');
+
+        if (rectListStr === null) {
+            return;
+        }
+
+        try {
+            const rectList = JSON.parse(rectListStr);
+
+            if (Array.isArray(rectList)) {
+                this.rectList = this.mapOrigToGameRectList(rectList);
+            } else {
+                throw new Error();
+            }
+        } catch (e) {
+            alert('error parsing rectList');
+        }
+    }
+
+    getOrigImageRectList() {
+        const image = this.walls.getImage();
+        const scale = this.game.width / image.width;
+
+        return this.rectList.map(rect => {
+            const x = rect.x / scale;
+            const y = rect.y / scale + this.walls.position;
+            const w = rect.w / scale;
+            const h = rect.h / scale;
+
+            return {x, y, w, h};
+        });
+    }
+
+    mapOrigToGameRectList(percentRectList: Array<{ x: number, y: number, w: number, h: number }>) {
+        const image = this.walls.getImage();
+        const scale = this.game.width / image.width;
+
+        return percentRectList.map(rect => {
+            const x = Math.round(rect.x * scale);
+            const y = Math.round((rect.y - this.walls.position) * scale);
+            const w = Math.round(rect.w * scale);
+            const h = Math.round(rect.h * scale);
+
+            return new EditableRect({x, y, w, h, container: this.container, onChange: this.onRectChange.bind(this)});
+        });
+    }
+
+    onRectChange() {
+        this.storeRectList();
     }
 
     listen() {
@@ -107,9 +170,7 @@ export default class RectGenerator {
 
     onPressDelete() {
         if (this.currEditRect) {
-            const index = this.rectList.indexOf(this.currEditRect);
-
-            this.rectList.splice(index, 1);
+            this.deleteRect(this.currEditRect);
             this.currEditRect = null;
         }
     }
@@ -119,6 +180,7 @@ export default class RectGenerator {
             x - this.movingRectDeltaX,
             y - this.movingRectDeltaY
         );
+        this.storeRectList();
     }
 
     processHover(x: number, y: number) {
@@ -152,8 +214,26 @@ export default class RectGenerator {
         const {x, y, w, h} = this.getCurrentRect();
 
         if (w > 0 || h > 0) {
-            this.rectList.push(new EditableRect(x, y, w, h, this.container));
+            this.addRect(new EditableRect({
+                x, y, w, h,
+                container: this.container,
+                onChange: this.onRectChange.bind(this)
+            }));
             this.startEdit(this.rectList[this.rectList.length - 1]);
+        }
+    }
+
+    addRect(rect: EditableRect) {
+        this.rectList.push(rect);
+        this.storeRectList();
+    }
+
+    deleteRect(rect: EditableRect) {
+        const index = this.rectList.indexOf(rect);
+
+        if (index >= 0) {
+            this.rectList.splice(index, 1);
+            this.storeRectList();
         }
     }
 
@@ -182,6 +262,7 @@ export default class RectGenerator {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
+        this.walls.draw(ctx);
         this.drawRectList(ctx);
         this.drawCurrentDrawRect(ctx);
     }

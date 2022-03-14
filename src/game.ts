@@ -3,8 +3,13 @@ import Collisions from "./collisions";
 import EnemyGenerator from "./enemyGenerator";
 import StarrySky from "./starrySky";
 import Walls from "./walls";
+import PathGenerator from "./pathGenerator";
+import RectGenerator from "./rectGenerator";
+
+type Mode = 'play' | 'rect-editor' | 'path-editor';
 
 export default class Game {
+    public mode: Mode = 'play';
     public width: number;
     public height: number;
     public timePast: number;
@@ -15,8 +20,11 @@ export default class Game {
     private enemyGenerator: EnemyGenerator;
     private starrySky: StarrySky;
     private walls: Walls;
+    private canvas: HTMLCanvasElement;
+    private pathGenerator: PathGenerator;
+    private rectGenerator: RectGenerator;
 
-    constructor(width: number, height: number) {
+    constructor(width: number, height: number, canvas: HTMLCanvasElement) {
         this.width = width;
         this.height = height;
         this.lastEnemyTime = 0;
@@ -27,23 +35,62 @@ export default class Game {
         this.enemyGenerator = new EnemyGenerator(this);
         this.starrySky = new StarrySky(this);
         this.walls = new Walls(this);
+
+        this.canvas = canvas;
+        this.pathGenerator = new PathGenerator(canvas);
+        this.rectGenerator = new RectGenerator(this, canvas);
+
+        this.listen();
+    }
+
+    listen() {
+        document.addEventListener('keydown', this.onKeydown.bind(this));
+    }
+
+    onKeydown(event: KeyboardEvent) {
+        switch (event.code) {
+            case 'KeyE':
+                return this.switchMode();
+        }
+    }
+
+    switchMode() {
+        const modes: Mode[] = ['play', 'rect-editor', 'path-editor'];
+        const curIndex = modes.indexOf(this.mode);
+        const newIndex = (curIndex + 1) % modes.length;
+
+        this.mode = modes[newIndex];
     }
 
     update(delta: number) {
         this.timePast += delta;
 
-        this.ship.update(delta);
-        this.collisions.detectCollisions(this.enemyGenerator.enemies, [...this.ship.bullets, this.ship]);
-        this.enemyGenerator.update(delta);
-        this.starrySky.update(delta);
-        this.walls.update(delta);
+        switch (this.mode) {
+            case 'play':
+                this.ship.update(delta);
+                this.collisions.detectCollisions(this.enemyGenerator.enemies, [...this.ship.bullets, this.ship]);
+                this.enemyGenerator.update(delta);
+                this.starrySky.update(delta);
+                this.walls.update(delta);
+                break;
+        }
     }
 
     draw(ctx: CanvasRenderingContext2D) {
-        this.starrySky.draw(ctx);
-        this.walls.draw(ctx);
-        this.enemyGenerator.draw(ctx);
-        this.ship.draw(ctx);
+        switch (this.mode) {
+            case 'play':
+                this.starrySky.draw(ctx);
+                this.walls.draw(ctx);
+                this.enemyGenerator.draw(ctx);
+                this.ship.draw(ctx);
+                break;
+            case 'rect-editor':
+                this.rectGenerator.draw(ctx);
+                break;
+            case 'path-editor':
+                this.pathGenerator.draw(ctx);
+                break;
+        }
 
         // ctx.fillStyle = "red";
         // const enemies = this.enemyGenerator.enemies.map(item => {

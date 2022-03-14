@@ -2,6 +2,14 @@ import {Rect} from "./rect";
 
 type ResizeSide = 'n' | 'e' | 's' | 'w' | 'ne' | 'se' | 'sw' | 'nw';
 
+interface EditableRectProps {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    container: HTMLElement;
+    onChange: () => {};
+}
 
 export class EditableRect extends Rect {
     private isEditing?: boolean;
@@ -11,10 +19,12 @@ export class EditableRect extends Rect {
     private cursor: string;
     private resizeSide: ResizeSide | null = null;
     private resizePosition: { x: number; y: number } | null = null;
+    private onChange: () => {};
 
-    constructor(x: number, y: number, w: number, h: number, container: HTMLElement) {
-        super(x, y, w, h);
+    constructor({x, y, w, h, container, onChange}: EditableRectProps) {
+        super({x, y, w, h});
         this.container = container;
+        this.onChange = onChange;
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
@@ -142,6 +152,7 @@ export class EditableRect extends Rect {
         }
 
         this.reCreateSmallRectList();
+        this.onChange();
     }
 
     stopResize() {
@@ -197,7 +208,7 @@ export class EditableRect extends Rect {
 
     createSmallRect(x, y) {
         const size = 6;
-        return new Rect(x - size / 2, y - size / 2, size, size);
+        return new Rect({x: x - size / 2, y: y - size / 2, w: size, h: size});
     }
 
     draw(ctx: CanvasRenderingContext2D) {
@@ -233,7 +244,7 @@ export class EditableRect extends Rect {
             return;
         }
 
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
         this.smallRectList.forEach(({x, y, w, h}) => {
             ctx.fillRect(x, y, w, h);
         });
