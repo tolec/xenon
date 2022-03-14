@@ -68,7 +68,7 @@ export default class Game {
         switch (this.mode) {
             case 'play':
                 this.ship.update(delta);
-                this.collisions.detectCollisions(this.enemyGenerator.enemies, [...this.ship.bullets, this.ship]);
+                this.collisions.detectCollisions(this.ship, this.walls, this.enemyGenerator.enemies, this.ship.bullets);
                 this.enemyGenerator.update(delta);
                 this.starrySky.update(delta);
                 this.walls.update(delta);
