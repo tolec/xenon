@@ -49,10 +49,21 @@ export default class PathGenerator {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
+        ctx.strokeStyle = 'yellow';
+
         this.points.forEach((point, index) => {
+            if (index === 0) {
+                ctx.beginPath();
+                ctx.moveTo(point.x, point.y);
+            } else {
+                ctx.lineTo(point.x, point.y);
+            }
+
             ctx.fillStyle = index === this.currentPoint ? 'green' : 'yellow';
             ctx.fillRect(point.x - point.width / 2, point.y - point.height / 2, point.width, point.height);
         });
+
+        ctx.stroke();
     }
 
     print() {
