@@ -6,7 +6,8 @@ import {Position} from "./position";
 type MoveArray = number[];
 
 export default class Ship {
-    public position: Position
+    public position: Position;
+    public prevPosition: Position;
     public width: number;
     public height: number;
     private game: Game;
@@ -113,6 +114,7 @@ export default class Ship {
         vector.normalize();
         vector.multiply(delta * speed);
 
+        this.prevPosition = this.position.clone();
         this.position.add(vector);
 
         if (this.position.x < 0) {
@@ -144,6 +146,10 @@ export default class Ship {
             this.timeFromLastShoot = 0;
             this.fire();
         }
+    }
+
+    restorePosition() {
+        this.position = this.prevPosition;
     }
 
     fire() {

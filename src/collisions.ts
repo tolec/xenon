@@ -15,6 +15,13 @@ export default class Collisions {
         // TODO Probably this work very slow, need to optimize it
         const shipRect = new Rect({x: ship.position.x, y: ship.position.y, w: ship.width, h: ship.height});
 
+        for (const wallRect of wallRectList) {
+            if (this.isCollision(shipRect, wallRect)) {
+                console.log('ship into wall');
+                ship.restorePosition();
+            }
+        }
+
         for (const enemy of enemies) {
             // TODO Probably this work very slow, need to optimize it
             const enemyRect = new Rect({x: enemy.position.x, y: enemy.position.y, w: enemy.width, h: enemy.height});
@@ -38,12 +45,6 @@ export default class Collisions {
                     bullet.isOver = true;
                     enemy.isOver = true;
                 }
-            }
-        }
-
-        for (const wallRect of wallRectList) {
-            if (this.isCollision(shipRect, wallRect)) {
-                console.log('ship into wall');
             }
         }
     }

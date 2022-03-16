@@ -70,12 +70,13 @@ export default class Game {
 
         switch (this.mode) {
             case 'play':
-                this.ship.update(delta);
-                this.collisions.detectCollisions(
-                    this.ship, this.obstacles.shownRectList, this.enemyGenerator.enemies, this.ship.bullets);
-                this.enemyGenerator.update(delta);
                 this.starrySky.update(delta);
                 this.obstacles.update(delta);
+                this.ship.update(delta);
+                this.collisions.detectCollisions(
+                    this.ship, this.obstacles.shownRectList, this.enemyGenerator.enemies, this.ship.bullets
+                );
+                this.enemyGenerator.update(delta);
                 break;
         }
     }
