@@ -1,11 +1,13 @@
 import {EditableRect} from "./editableRect";
 import Game from "./game";
 import Wall from "./wall";
+import RectStorage from './rectStorage';
 
 export default class RectDrawer {
     private game: Game;
     private container: HTMLElement;
     private wall: Wall;
+    private rectStorage: RectStorage;
     private isDrawStarted: boolean;
     private isDrawing: boolean;
     private startX: number;
@@ -23,32 +25,17 @@ export default class RectDrawer {
         this.game = game;
         this.container = container;
         this.wall = new Wall(game);
+        this.rectStorage = new RectStorage();
         this.restoreRectList();
         this.listen();
     }
 
     storeRectList() {
-        localStorage.setItem('rectList', JSON.stringify(this.getOrigImageRectList()));
+        this.rectStorage.setRectList(this.getOrigImageRectList());
     }
 
     restoreRectList() {
-        const rectListStr = localStorage.getItem('rectList');
-
-        if (rectListStr === null) {
-            return;
-        }
-
-        try {
-            const rectList = JSON.parse(rectListStr);
-
-            if (Array.isArray(rectList)) {
-                this.rectList = this.mapOrigToGameRectList(rectList);
-            } else {
-                throw new Error();
-            }
-        } catch (e) {
-            alert('error parsing rectList');
-        }
+        this.rectList = this.mapOrigToGameRectList(this.rectStorage.getRectList());
     }
 
     getOrigImageRectList() {
@@ -65,11 +52,11 @@ export default class RectDrawer {
         });
     }
 
-    mapOrigToGameRectList(percentRectList: Array<{ x: number, y: number, w: number, h: number }>) {
+    mapOrigToGameRectList(storageRectList: Array<{ x: number, y: number, w: number, h: number }>) {
         const image = this.wall.getImage();
         const scale = this.game.width / image.width;
 
-        return percentRectList.map(rect => {
+        return storageRectList.map(rect => {
             const x = Math.round(rect.x * scale);
             const y = Math.round((rect.y - this.wall.position) * scale);
             const w = Math.round(rect.w * scale);

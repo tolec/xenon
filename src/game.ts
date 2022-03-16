@@ -5,6 +5,7 @@ import StarrySky from "./starrySky";
 import Wall from "./wall";
 import PathDrawer from "./pathDrawer";
 import RectDrawer from "./rectDrawer";
+import Obstacles from './obstacles';
 
 type Mode = 'play' | 'rect-editor' | 'path-editor';
 
@@ -20,6 +21,7 @@ export default class Game {
     private enemyGenerator: EnemyGenerator;
     private starrySky: StarrySky;
     private wall: Wall;
+    private obstacles: Obstacles;
     private canvas: HTMLCanvasElement;
     private pathDrawer: PathDrawer;
     private rectDrawer: RectDrawer;
@@ -35,6 +37,7 @@ export default class Game {
         this.enemyGenerator = new EnemyGenerator(this);
         this.starrySky = new StarrySky(this);
         this.wall = new Wall(this);
+        this.obstacles = new Obstacles(this);
 
         this.canvas = canvas;
         this.pathDrawer = new PathDrawer(canvas);
@@ -68,10 +71,11 @@ export default class Game {
         switch (this.mode) {
             case 'play':
                 this.ship.update(delta);
-                this.collisions.detectCollisions(this.ship, this.enemyGenerator.enemies, this.ship.bullets);
+                this.collisions.detectCollisions(
+                    this.ship, this.obstacles.shownRectList, this.enemyGenerator.enemies, this.ship.bullets);
                 this.enemyGenerator.update(delta);
                 this.starrySky.update(delta);
-                this.wall.update(delta);
+                this.obstacles.update(delta);
                 break;
         }
     }
@@ -80,7 +84,7 @@ export default class Game {
         switch (this.mode) {
             case 'play':
                 this.starrySky.draw(ctx);
-                this.wall.draw(ctx);
+                this.obstacles.draw(ctx);
                 this.enemyGenerator.draw(ctx);
                 this.ship.draw(ctx);
                 break;
