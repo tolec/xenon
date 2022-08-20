@@ -6,8 +6,8 @@ import { Position } from './position';
 type MoveArray = number[];
 
 export default class Ship {
-    public position: Position;
-    public prevPosition: Position;
+    public position: Vector;
+    public prevPosition: Vector;
     public width: number;
     public height: number;
     private game: Game;
@@ -27,7 +27,7 @@ export default class Ship {
         this.game = game;
         this.speedX = 250;
         this.speedY = 200;
-        this.position = new Position(400, 300);
+        this.position = new Vector(400, 300);
         this.width = 75;
         this.height = 60;
         this.isShooting = false;
@@ -112,10 +112,10 @@ export default class Ship {
         const speed = xDirection ? 300 : 200;
         const vector = new Vector(xDirection * this.speedX, yDirection * this.speedY);
         vector.normalize();
-        vector.multiply(delta * speed);
+        vector.multiplySelf(delta * speed);
 
         this.prevPosition = this.position.clone();
-        this.position.add(vector);
+        this.position.addSelf(vector);
 
         if (this.position.x < 0) {
             this.position.x = 0;

@@ -1,9 +1,9 @@
-import Game from './game';
-import { data } from './enemies/bee';
-import { Vector } from './vector';
-import { Position } from './position';
+import Game from '../game';
+import { data } from '../enemies/bee';
+import { Vector } from '../vector';
+import { Position } from '../position';
 
-export default class Path {
+export default class SeekPath {
     private game: Game;
     public points: Position[];
     public position: Position;
@@ -66,9 +66,9 @@ export default class Path {
 
         const seekVector = this.seek(targetPosition);
         seekVector.normalize();
-        seekVector.multiply(steeringForce);
+        seekVector.multiplySelf(steeringForce);
 
-        this.velocity.add(seekVector);
+        this.velocity.addSelf(seekVector);
         this.velocity.truncate(maxSpeed);
         // this.velocity.multiply(maxSpeed);
         // this.velocity.multiply(delta);

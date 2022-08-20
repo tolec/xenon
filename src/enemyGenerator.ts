@@ -1,5 +1,6 @@
 import Game from './game';
 import Enemy from './enemy';
+import { EnemyPath } from './path/EnemyPath';
 
 export default class EnemyGenerator {
     private game: Game;
@@ -24,11 +25,9 @@ export default class EnemyGenerator {
             this.nextEnemyTime = 0;
 
             for (let i = 0; i < 5; i++) {
-                const enemy = new Enemy(this.game, this.game.width / 2, this.game.height / 2, -1, 0);
-                enemy.path.points[0].x -= i * 50;
-                enemy.path.position = enemy.path.points[0].clone();
-
-                this.enemies.push(enemy);
+                setTimeout(() => {
+                    this.enemies.push(new Enemy(new EnemyPath()));
+                }, i * 1000);
             }
         }
     }

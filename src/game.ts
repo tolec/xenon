@@ -3,7 +3,7 @@ import Collisions from './collisions';
 import EnemyGenerator from './enemyGenerator';
 import StarrySky from './starrySky';
 import Wall from './wall';
-import PathDrawer from './pathDrawer';
+import PathDrawer from './path/PathDrawer';
 import RectDrawer from './rectDrawer';
 import Obstacles from './obstacles';
 

@@ -1,6 +1,6 @@
 export default class PathDrawer {
     private container: HTMLElement;
-    private points: Point[];
+    private points: RectPoint[];
     private currentPoint: number;
 
     constructor(container: HTMLElement) {
@@ -37,7 +37,7 @@ export default class PathDrawer {
         } else if (this.currentPoint !== -1) {
             this.currentPoint = -1;
         } else {
-            this.points.push(new Point(offsetX, offsetY));
+            this.points.push(new RectPoint(offsetX, offsetY));
             this.print();
         }
     }
@@ -88,7 +88,7 @@ export default class PathDrawer {
     }
 }
 
-class Point {
+class RectPoint {
     x: number;
     y: number;
     width: number = 12;

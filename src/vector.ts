@@ -9,9 +9,26 @@ export class Vector extends Position {
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
     }
 
+    add(vector: Vector) {
+        return this.clone().addSelf(vector);
+    }
+
     multiply(value: number) {
+        return this.clone().multiplySelf(value);
+    }
+
+    addSelf(vector: Vector) {
+        this.x += vector.x;
+        this.y += vector.y;
+
+        return this;
+    }
+
+    multiplySelf(value: number) {
         this.x *= value;
         this.y *= value;
+
+        return this;
     }
 
     normalize() {
