@@ -1,10 +1,10 @@
-import Game from "./game";
+import Game from './game';
 
 const canvas = document.getElementById('game') as HTMLCanvasElement;
 const GAME_WIDTH = canvas.width;
 const GAME_HEIGHT = canvas.height;
 
-const ctx = canvas.getContext('2d', {alpha: false})!;
+const ctx = canvas.getContext('2d', { alpha: false })!;
 ctx.imageSmoothingEnabled = false;
 
 const game = new Game(GAME_WIDTH, GAME_HEIGHT, canvas);
@@ -27,7 +27,7 @@ function gameLoop(timeStamp) {
     deltaTime = Math.min((timeStamp - oldTimeStamp) / 1000, 0.1);
     oldTimeStamp = timeStamp;
 
-    // ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+    ctx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);

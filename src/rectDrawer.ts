@@ -1,6 +1,6 @@
-import {EditableRect} from "./editableRect";
-import Game from "./game";
-import Wall from "./wall";
+import { EditableRect } from './editableRect';
+import Game from './game';
+import Wall from './wall';
 import RectStorage from './rectStorage';
 
 export default class RectDrawer {
@@ -26,8 +26,18 @@ export default class RectDrawer {
         this.container = container;
         this.wall = new Wall(game);
         this.rectStorage = new RectStorage();
+
+        this.onKeydown = this.onKeydown.bind(this);
+        this.onMouseDown = this.onMouseDown.bind(this);
+        this.onMouseMove = this.onMouseMove.bind(this);
+        this.onMouseUp = this.onMouseUp.bind(this);
+
         this.restoreRectList();
         this.listen();
+    }
+
+    destroy() {
+        this.unListen();
     }
 
     storeRectList() {
@@ -48,11 +58,11 @@ export default class RectDrawer {
             const w = rect.w / scale;
             const h = rect.h / scale;
 
-            return {x, y, w, h};
+            return { x, y, w, h };
         });
     }
 
-    mapOrigToGameRectList(storageRectList: Array<{ x: number, y: number, w: number, h: number }>) {
+    mapOrigToGameRectList(storageRectList: Array<{ x: number; y: number; w: number; h: number }>) {
         const image = this.wall.getImage();
         const scale = this.game.width / image.width;
 
@@ -62,7 +72,14 @@ export default class RectDrawer {
             const w = Math.round(rect.w * scale);
             const h = Math.round(rect.h * scale);
 
-            return new EditableRect({x, y, w, h, container: this.container, onChange: this.onRectChange.bind(this)});
+            return new EditableRect({
+                x,
+                y,
+                w,
+                h,
+                container: this.container,
+                onChange: this.onRectChange.bind(this),
+            });
         });
     }
 
@@ -71,10 +88,17 @@ export default class RectDrawer {
     }
 
     listen() {
-        document.addEventListener('keydown', this.onKeydown.bind(this));
-        this.container.addEventListener('mousedown', this.onMouseDown.bind(this));
-        this.container.addEventListener('mousemove', this.onMouseMove.bind(this));
-        this.container.addEventListener('mouseup', this.onMouseUp.bind(this));
+        document.addEventListener('keydown', this.onKeydown);
+        this.container.addEventListener('mousedown', this.onMouseDown);
+        this.container.addEventListener('mousemove', this.onMouseMove);
+        this.container.addEventListener('mouseup', this.onMouseUp);
+    }
+
+    unListen() {
+        document.removeEventListener('keydown', this.onKeydown);
+        this.container.removeEventListener('mousedown', this.onMouseDown);
+        this.container.removeEventListener('mousemove', this.onMouseMove);
+        this.container.removeEventListener('mouseup', this.onMouseUp);
     }
 
     onKeydown(event: KeyboardEvent) {
@@ -163,10 +187,7 @@ export default class RectDrawer {
     }
 
     moveRect(x: number, y: number) {
-        this.currEditRect?.setPosition(
-            x - this.movingRectDeltaX,
-            y - this.movingRectDeltaY
-        );
+        this.currEditRect?.setPosition(x - this.movingRectDeltaX, y - this.movingRectDeltaY);
         this.storeRectList();
     }
 
@@ -198,14 +219,19 @@ export default class RectDrawer {
     }
 
     finishDrawRect() {
-        const {x, y, w, h} = this.getCurrentRect();
+        const { x, y, w, h } = this.getCurrentRect();
 
         if (w > 0 || h > 0) {
-            this.addRect(new EditableRect({
-                x, y, w, h,
-                container: this.container,
-                onChange: this.onRectChange.bind(this)
-            }));
+            this.addRect(
+                new EditableRect({
+                    x,
+                    y,
+                    w,
+                    h,
+                    container: this.container,
+                    onChange: this.onRectChange.bind(this),
+                }),
+            );
             this.startEdit(this.rectList[this.rectList.length - 1]);
         }
     }
@@ -245,7 +271,7 @@ export default class RectDrawer {
         const w = Math.abs(this.startX - this.currentX);
         const h = Math.abs(this.startY - this.currentY);
 
-        return {x, y, w, h};
+        return { x, y, w, h };
     }
 
     draw(ctx: CanvasRenderingContext2D) {
@@ -265,7 +291,7 @@ export default class RectDrawer {
             return;
         }
 
-        const {x, y, w, h} = this.getCurrentRect();
+        const { x, y, w, h } = this.getCurrentRect();
 
         ctx.fillStyle = 'rgb(255, 239, 34, .4)';
         ctx.fillRect(x, y, w, h);

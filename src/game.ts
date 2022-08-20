@@ -1,10 +1,10 @@
-import Ship from "./ship";
-import Collisions from "./collisions";
-import EnemyGenerator from "./enemyGenerator";
-import StarrySky from "./starrySky";
-import Wall from "./wall";
-import PathDrawer from "./pathDrawer";
-import RectDrawer from "./rectDrawer";
+import Ship from './ship';
+import Collisions from './collisions';
+import EnemyGenerator from './enemyGenerator';
+import StarrySky from './starrySky';
+import Wall from './wall';
+import PathDrawer from './pathDrawer';
+import RectDrawer from './rectDrawer';
 import Obstacles from './obstacles';
 
 type Mode = 'play' | 'rect-editor' | 'path-editor';
@@ -23,8 +23,8 @@ export default class Game {
     private wall: Wall;
     private obstacles: Obstacles;
     private canvas: HTMLCanvasElement;
-    private pathDrawer: PathDrawer;
-    private rectDrawer: RectDrawer;
+    private pathDrawer?: PathDrawer;
+    private rectDrawer?: RectDrawer;
 
     constructor(width: number, height: number, canvas: HTMLCanvasElement) {
         this.width = width;
@@ -38,10 +38,7 @@ export default class Game {
         this.starrySky = new StarrySky(this);
         this.wall = new Wall(this);
         this.obstacles = new Obstacles(this);
-
         this.canvas = canvas;
-        this.pathDrawer = new PathDrawer(canvas);
-        this.rectDrawer = new RectDrawer(this, canvas);
 
         this.listen();
     }
@@ -58,11 +55,31 @@ export default class Game {
     }
 
     switchMode() {
+        switch (this.mode) {
+            case 'path-editor':
+                this.pathDrawer?.destroy();
+                delete this.pathDrawer;
+                break;
+            case 'rect-editor':
+                this.rectDrawer?.destroy();
+                delete this.rectDrawer;
+                break;
+        }
+
         const modes: Mode[] = ['play', 'rect-editor', 'path-editor'];
         const curIndex = modes.indexOf(this.mode);
         const newIndex = (curIndex + 1) % modes.length;
 
         this.mode = modes[newIndex];
+
+        switch (this.mode) {
+            case 'path-editor':
+                this.pathDrawer = new PathDrawer(this.canvas);
+                break;
+            case 'rect-editor':
+                this.rectDrawer = new RectDrawer(this, this.canvas);
+                break;
+        }
     }
 
     update(delta: number) {
@@ -74,7 +91,10 @@ export default class Game {
                 this.obstacles.update(delta);
                 this.ship.update(delta);
                 this.collisions.detectCollisions(
-                    this.ship, this.obstacles.shownRectList, this.enemyGenerator.enemies, this.ship.bullets
+                    this.ship,
+                    this.obstacles.shownRectList,
+                    this.enemyGenerator.enemies,
+                    this.ship.bullets,
                 );
                 this.enemyGenerator.update(delta);
                 break;
@@ -90,10 +110,10 @@ export default class Game {
                 this.ship.draw(ctx);
                 break;
             case 'rect-editor':
-                this.rectDrawer.draw(ctx);
+                this.rectDrawer?.draw(ctx);
                 break;
             case 'path-editor':
-                this.pathDrawer.draw(ctx);
+                this.pathDrawer?.draw(ctx);
                 break;
         }
 

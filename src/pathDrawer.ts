@@ -7,16 +7,29 @@ export default class PathDrawer {
         this.container = container;
         this.points = [];
         this.currentPoint = -1;
+
+        this.onClick = this.onClick.bind(this);
+        this.onKeydown = this.onKeydown.bind(this);
+
         this.listen();
     }
 
+    destroy() {
+        this.unListen();
+    }
+
     listen() {
-        this.container.addEventListener('click', this.onClick.bind(this));
-        document.addEventListener('keydown', this.onKeydown.bind(this));
+        this.container.addEventListener('click', this.onClick);
+        document.addEventListener('keydown', this.onKeydown);
+    }
+
+    unListen() {
+        this.container.removeEventListener('click', this.onClick);
+        document.removeEventListener('keydown', this.onKeydown);
     }
 
     onClick(event: MouseEvent) {
-        const {offsetX, offsetY} = event;
+        const { offsetX, offsetY } = event;
         const pointIndex = this.findPointIndex(offsetX, offsetY);
 
         if (pointIndex !== -1) {
@@ -49,6 +62,10 @@ export default class PathDrawer {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
+        if (this.points.length === 0) {
+            return;
+        }
+
         ctx.strokeStyle = 'yellow';
 
         this.points.forEach((point, index) => {
