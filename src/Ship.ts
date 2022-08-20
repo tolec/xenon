@@ -44,18 +44,23 @@ export default class Ship {
             switch (event.code) {
                 case 'ArrowLeft':
                     this.addMove(this.moveX, -1);
+                    event.preventDefault();
                     break;
                 case 'ArrowRight':
                     this.addMove(this.moveX, 1);
+                    event.preventDefault();
                     break;
                 case 'ArrowUp':
                     this.addMove(this.moveY, -1);
+                    event.preventDefault();
                     break;
                 case 'ArrowDown':
                     this.addMove(this.moveY, 1);
+                    event.preventDefault();
                     break;
                 case 'Space':
                     this.isShooting = true;
+                    event.preventDefault();
                     break;
             }
         });
