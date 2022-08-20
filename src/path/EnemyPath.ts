@@ -1,7 +1,7 @@
 import { PathFollow } from '../types/types';
-import { Position } from '../position';
+import { Position } from '../Position';
 import { BezierCurveCubic, BezierCurveLinear, BezierCurvePath, BezierCurveQuadratic } from './BezierCurvePath';
-import { Vector } from '../vector';
+import { Vector } from '../Vector';
 
 export class EnemyPath implements PathFollow {
     private path: BezierCurvePath;

@@ -1,7 +1,7 @@
-import Game from './game';
-import Wall from './wall';
-import RectStorage from './rectStorage';
-import { Rect } from './rect';
+import Game from './Game';
+import Wall from './Wall';
+import RectStorage from './RectStorage';
+import { Rect } from './Rect';
 
 export default class Obstacles {
     private game: Game;

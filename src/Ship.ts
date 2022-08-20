@@ -1,7 +1,6 @@
-import Game from './game';
-import Bullet from './bullet';
-import { Vector } from './vector';
-import { Position } from './position';
+import Game from './Game';
+import Bullet from './Bullet';
+import { Vector } from './Vector';
 
 type MoveArray = number[];
 

@@ -1,7 +1,7 @@
-import Game from '../game';
+import Game from '../Game';
 import { data } from '../enemies/bee';
-import { Vector } from '../vector';
-import { Position } from '../position';
+import { Vector } from '../Vector';
+import { Position } from '../Position';
 
 export default class SeekPath {
     private game: Game;

@@ -1,5 +1,5 @@
-import Game from './game';
-import Enemy from './enemy';
+import Game from './Game';
+import Enemy from './Enemy';
 import { EnemyPath } from './path/EnemyPath';
 
 export default class EnemyGenerator {

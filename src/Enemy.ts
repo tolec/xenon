@@ -1,4 +1,4 @@
-import { Position } from './position';
+import { Position } from './Position';
 import { EnemyPath } from './path/EnemyPath';
 
 export default class Enemy {

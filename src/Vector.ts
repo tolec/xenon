@@ -1,4 +1,4 @@
-import { Position } from './position';
+import { Position } from './Position';
 
 export class Vector extends Position {
     clone() {

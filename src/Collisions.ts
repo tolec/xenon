@@ -1,8 +1,8 @@
-import Game from './game';
-import Ship from './ship';
-import { Rect } from './rect';
-import Enemy from './enemy';
-import Bullet from './bullet';
+import Game from './Game';
+import Ship from './Ship';
+import { Rect } from './Rect';
+import Enemy from './Enemy';
+import Bullet from './Bullet';
 
 export default class Collisions {
     private game: Game;

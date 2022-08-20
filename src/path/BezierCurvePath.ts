@@ -1,4 +1,4 @@
-import { Vector } from '../vector';
+import { Vector } from '../Vector';
 import { PathFollow } from '../types/types';
 
 const SPEED = 0.5;

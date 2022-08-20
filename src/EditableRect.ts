@@ -1,4 +1,4 @@
-import { Rect } from './rect';
+import { Rect } from './Rect';
 
 type ResizeSide = 'n' | 'e' | 's' | 'w' | 'ne' | 'se' | 'sw' | 'nw';
 

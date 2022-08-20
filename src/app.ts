@@ -1,4 +1,4 @@
-import Game from './game';
+import Game from './Game';
 
 const canvas = document.getElementById('game') as HTMLCanvasElement;
 const GAME_WIDTH = canvas.width;

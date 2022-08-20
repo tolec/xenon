@@ -1,7 +1,7 @@
-import { EditableRect } from './editableRect';
-import Game from './game';
-import Wall from './wall';
-import RectStorage from './rectStorage';
+import { EditableRect } from './EditableRect';
+import Game from './Game';
+import Wall from './Wall';
+import RectStorage from './RectStorage';
 
 export default class RectDrawer {
     private game: Game;
