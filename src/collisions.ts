@@ -1,6 +1,6 @@
-import Game from "./game";
+import Game from './game';
 import Ship from './ship';
-import {Rect} from './rect';
+import { Rect } from './rect';
 import Enemy from './enemy';
 import Bullet from './bullet';
 
@@ -13,7 +13,7 @@ export default class Collisions {
 
     detectCollisions(ship: Ship, wallRectList: Rect[], enemies: Enemy[], bullets: Bullet[]) {
         // TODO Probably this work very slow, need to optimize it
-        const shipRect = new Rect({x: ship.position.x, y: ship.position.y, w: ship.width, h: ship.height});
+        const shipRect = new Rect({ x: ship.position.x, y: ship.position.y, w: ship.width, h: ship.height });
 
         for (const wallRect of wallRectList) {
             if (this.isCollision(shipRect, wallRect)) {
@@ -24,7 +24,7 @@ export default class Collisions {
 
         for (const enemy of enemies) {
             // TODO Probably this work very slow, need to optimize it
-            const enemyRect = new Rect({x: enemy.position.x, y: enemy.position.y, w: enemy.width, h: enemy.height});
+            const enemyRect = new Rect({ x: enemy.position.x, y: enemy.position.y, w: enemy.width, h: enemy.height });
 
             if (this.isCollision(enemyRect, shipRect)) {
                 console.log('ship into enemy');
@@ -37,7 +37,7 @@ export default class Collisions {
                     x: bullet.position.x,
                     y: bullet.position.y,
                     w: bullet.width,
-                    h: bullet.height
+                    h: bullet.height,
                 });
 
                 if (this.isCollision(enemyRect, bulletRect)) {
@@ -50,11 +50,6 @@ export default class Collisions {
     }
 
     isCollision(one: Rect, two: Rect) {
-        return (
-            one.x + one.w >= two.x &&
-            one.x <= two.x + two.w &&
-            one.y + one.h >= two.y &&
-            one.y <= two.y + two.h
-        );
+        return one.x + one.w >= two.x && one.x <= two.x + two.w && one.y + one.h >= two.y && one.y <= two.y + two.h;
     }
 }

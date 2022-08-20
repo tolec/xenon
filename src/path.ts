@@ -1,7 +1,7 @@
-import Game from "./game";
-import {data} from "./enemies/bee";
-import {Vector} from "./vector";
-import {Position} from "./position";
+import Game from './game';
+import { data } from './enemies/bee';
+import { Vector } from './vector';
+import { Position } from './position';
 
 export default class Path {
     private game: Game;
@@ -93,7 +93,7 @@ export default class Path {
             return;
         }
 
-        ctx.fillStyle = "#fff";
+        ctx.fillStyle = '#fff';
         ctx.fillText(`Time: ${(this.endTime - this.starTime).toFixed(1)}`, this.position.x, this.position.y - 10);
 
         this.points.forEach((point, index) => {
@@ -104,7 +104,7 @@ export default class Path {
 
         let position;
 
-        ctx.strokeStyle = "red";
+        ctx.strokeStyle = 'red';
         ctx.beginPath();
         position = this.prevPosition.clone();
         ctx.moveTo(position.x, position.y);
@@ -112,7 +112,7 @@ export default class Path {
         ctx.lineTo(position.x, position.y);
         ctx.stroke();
 
-        ctx.strokeStyle = "white";
+        ctx.strokeStyle = 'white';
         ctx.beginPath();
         position = this.prevPosition.clone();
         ctx.moveTo(position.x, position.y);
@@ -120,18 +120,16 @@ export default class Path {
         ctx.lineTo(position.x, position.y);
         ctx.stroke();
         //
-        ctx.strokeStyle = "green";
+        ctx.strokeStyle = 'green';
         ctx.beginPath();
         position = this.prevPosition.clone();
         ctx.moveTo(position.x, position.y);
         position.add(this.newVelocity);
         ctx.lineTo(position.x, position.y);
         ctx.stroke();
-
     }
 
     distance(a: Position, b: Position) {
         return Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2));
     }
 }
-

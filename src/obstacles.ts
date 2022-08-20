@@ -1,7 +1,7 @@
-import Game from "./game";
+import Game from './game';
 import Wall from './wall';
 import RectStorage from './rectStorage';
-import {Rect} from './rect';
+import { Rect } from './rect';
 
 export default class Obstacles {
     private game: Game;
@@ -29,7 +29,7 @@ export default class Obstacles {
         this.wall.position = image.height - this.game.height / scale;
     }
 
-    mapRectList(storageRectList: Array<{ x: number, y: number, w: number, h: number }>) {
+    mapRectList(storageRectList: Array<{ x: number; y: number; w: number; h: number }>) {
         const image = this.wall.getImage();
         const scale = this.game.width / image.width;
 
@@ -39,7 +39,7 @@ export default class Obstacles {
             const w = Math.round(rect.w * scale);
             const h = Math.round(rect.h * scale);
 
-            return new Rect({x, y, w, h});
+            return new Rect({ x, y, w, h });
         });
     }
 
@@ -55,8 +55,8 @@ export default class Obstacles {
         const image = this.wall.getImage();
         const scale = this.game.width / image.width;
 
-        this.shownRectList = this.rectList.map(({x, y, w, h}) => {
-            return new Rect({x, y: Math.round(y - this.wall.position * scale), w, h});
+        this.shownRectList = this.rectList.map(({ x, y, w, h }) => {
+            return new Rect({ x, y: Math.round(y - this.wall.position * scale), w, h });
         });
     }
 
@@ -79,7 +79,7 @@ export default class Obstacles {
 
         ctx.fillStyle = 'rgba(255, 200, 100, 0.5)';
 
-        this.shownRectList.forEach(({x, y, w, h}) => {
+        this.shownRectList.forEach(({ x, y, w, h }) => {
             ctx.fillRect(x, y, w, h);
         });
     }

@@ -1,4 +1,4 @@
-type StorageRect = { x: number, y: number, w: number, h: number };
+type StorageRect = { x: number; y: number; w: number; h: number };
 
 export default class RectStorage {
     setRectList(recList: StorageRect[]) {

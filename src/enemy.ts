@@ -1,10 +1,10 @@
-import Game from "./game";
-import Path from "./path";
-import {Position} from "./position";
+import Game from './game';
+import Path from './path';
+import { Position } from './position';
 
 export default class Enemy {
     public position: Position;
-    private speed: { x: number, y: number };
+    private speed: { x: number; y: number };
     private speedRatio: number;
     private game: Game;
     public width: number;
@@ -18,7 +18,7 @@ export default class Enemy {
     constructor(game: Game, x: number, y: number, speedX: number, speedY: number) {
         this.game = game;
         this.position = new Position(x, y);
-        this.speed = {x: speedX, y: speedY};
+        this.speed = { x: speedX, y: speedY };
         this.speedRatio = 3;
         this.width = 40;
         this.height = 40;
@@ -38,13 +38,7 @@ export default class Enemy {
 
         this.path.draw(ctx);
 
-        ctx.drawImage(
-            this.getImage(),
-            this.position.x,
-            this.position.y,
-            this.width,
-            this.height
-        );
+        ctx.drawImage(this.getImage(), this.position.x, this.position.y, this.width, this.height);
     }
 
     getImage() {

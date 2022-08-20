@@ -1,7 +1,7 @@
-import Game from "./game";
-import Bullet from "./bullet";
-import {Vector} from "./vector";
-import {Position} from "./position";
+import Game from './game';
+import Bullet from './bullet';
+import { Vector } from './vector';
+import { Position } from './position';
 
 type MoveArray = number[];
 
@@ -41,7 +41,7 @@ export default class Ship {
     }
 
     addEventListeners() {
-        document.addEventListener('keydown', (event) => {
+        document.addEventListener('keydown', event => {
             switch (event.code) {
                 case 'ArrowLeft':
                     this.addMove(this.moveX, -1);
@@ -55,13 +55,13 @@ export default class Ship {
                 case 'ArrowDown':
                     this.addMove(this.moveY, 1);
                     break;
-                case'Space':
+                case 'Space':
                     this.isShooting = true;
                     break;
             }
         });
 
-        document.addEventListener('keyup', (event) => {
+        document.addEventListener('keyup', event => {
             switch (event.code) {
                 case 'ArrowLeft':
                     this.deleteMove(this.moveX, -1);
@@ -75,7 +75,7 @@ export default class Ship {
                 case 'ArrowDown':
                     this.deleteMove(this.moveY, 1);
                     break;
-                case'Space':
+                case 'Space':
                     this.isShooting = false;
                     break;
             }
@@ -153,13 +153,7 @@ export default class Ship {
     }
 
     fire() {
-        const bullet = new Bullet(
-            this.game,
-            this.position.x + this.width / 2,
-            this.position.y,
-            0,
-            -1
-        );
+        const bullet = new Bullet(this.game, this.position.x + this.width / 2, this.position.y, 0, -1);
 
         this.bullets.push(bullet);
     }
@@ -168,13 +162,7 @@ export default class Ship {
         // ctx.fillStyle = this.isOver ? '#833' : "#bcf";
         // ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
 
-        ctx.drawImage(
-            this.getImage(),
-            this.position.x,
-            this.position.y,
-            this.width,
-            this.height
-        );
+        ctx.drawImage(this.getImage(), this.position.x, this.position.y, this.width, this.height);
 
         this.bullets.forEach(bullet => bullet.draw(ctx));
     }

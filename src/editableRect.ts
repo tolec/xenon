@@ -1,4 +1,4 @@
-import {Rect} from "./rect";
+import { Rect } from './rect';
 
 type ResizeSide = 'n' | 'e' | 's' | 'w' | 'ne' | 'se' | 'sw' | 'nw';
 
@@ -21,8 +21,8 @@ export class EditableRect extends Rect {
     private resizePosition: { x: number; y: number } | null = null;
     private onChange: () => {};
 
-    constructor({x, y, w, h, container, onChange}: EditableRectProps) {
-        super({x, y, w, h});
+    constructor({ x, y, w, h, container, onChange }: EditableRectProps) {
+        super({ x, y, w, h });
         this.container = container;
         this.onChange = onChange;
         this.onMouseDown = this.onMouseDown.bind(this);
@@ -101,15 +101,21 @@ export class EditableRect extends Rect {
         }
 
         const mapIndexToSide = {
-            0: 'nw', 1: 'ne', 2: 'se', 3: 'sw',
-            4: 'n', 5: 'e', 6: 's', 7: 'w',
+            0: 'nw',
+            1: 'ne',
+            2: 'se',
+            3: 'sw',
+            4: 'n',
+            5: 'e',
+            6: 's',
+            7: 'w',
         };
 
         const resizeSide: ResizeSide = mapIndexToSide[index];
 
         if (resizeSide) {
             this.resizeSide = resizeSide;
-            this.resizePosition = {x, y};
+            this.resizePosition = { x, y };
         }
     }
 
@@ -191,7 +197,7 @@ export class EditableRect extends Rect {
     }
 
     reCreateSmallRectList() {
-        const {x, y, w, h} = this;
+        const { x, y, w, h } = this;
 
         this.smallRectList = [
             this.createSmallRect(x, y),
@@ -208,11 +214,11 @@ export class EditableRect extends Rect {
 
     createSmallRect(x, y) {
         const size = 6;
-        return new Rect({x: x - size / 2, y: y - size / 2, w: size, h: size});
+        return new Rect({ x: x - size / 2, y: y - size / 2, w: size, h: size });
     }
 
     draw(ctx: CanvasRenderingContext2D) {
-        const {x, y, w, h} = this;
+        const { x, y, w, h } = this;
 
         if (this.isEditing) {
             if (this.isHover) {
@@ -245,7 +251,7 @@ export class EditableRect extends Rect {
         }
 
         ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-        this.smallRectList.forEach(({x, y, w, h}) => {
+        this.smallRectList.forEach(({ x, y, w, h }) => {
             ctx.fillRect(x, y, w, h);
         });
     }

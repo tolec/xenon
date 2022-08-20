@@ -11,7 +11,7 @@ export class Rect {
     private _w: number;
     private _h: number;
 
-    constructor({x, y, w, h}: RectProps) {
+    constructor({ x, y, w, h }: RectProps) {
         this._x = x;
         this._y = y;
         this._w = w;
@@ -45,9 +45,6 @@ export class Rect {
     }
 
     hasPoint(x: number, y: number) {
-        return (
-            x >= this._x && x <= this._x + this._w &&
-            y >= this._y && y <= this._y + this._h
-        );
+        return x >= this._x && x <= this._x + this._w && y >= this._y && y <= this._y + this._h;
     }
 }

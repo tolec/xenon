@@ -1,4 +1,4 @@
-import Game from "./game";
+import Game from './game';
 
 export default class Wall {
     public position: number;
@@ -32,17 +32,7 @@ export default class Wall {
         const scale = this.game.width / image.width;
         const imageCropHeight = Math.round(this.game.height / scale);
 
-        ctx.drawImage(
-            image,
-            0,
-            this.position,
-            image.width,
-            imageCropHeight,
-            0,
-            0,
-            this.game.width,
-            this.game.height,
-        );
+        ctx.drawImage(image, 0, this.position, image.width, imageCropHeight, 0, 0, this.game.width, this.game.height);
     }
 
     getImage() {

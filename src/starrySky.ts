@@ -1,4 +1,4 @@
-import Game from "./game";
+import Game from './game';
 
 const STAR_MAX_SIZE = 4;
 
@@ -23,18 +23,18 @@ export default class StarrySky {
         this.generateNewStars(dy);
 
         this.stars = this.stars.filter(star => star.y < this.game.height);
-        this.stars.forEach(star => star.y += dy);
+        this.stars.forEach(star => (star.y += dy));
     }
 
     generateNewStars(height: number) {
         const area = height * this.game.width;
-        const starsNumber = area / (100 * 100) * this.starsPer100x100;
+        const starsNumber = (area / (100 * 100)) * this.starsPer100x100;
 
         for (let i = 1; i < starsNumber; i++) {
             this.stars.push(this.generateStar(height));
         }
 
-        if (Math.random() < (starsNumber % 1)) {
+        if (Math.random() < starsNumber % 1) {
             this.stars.push(this.generateStar(height));
         }
     }
@@ -68,5 +68,4 @@ class Star {
         this.size = size;
         this.opacity = opacity;
     }
-
 }
