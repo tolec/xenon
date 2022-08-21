@@ -1,4 +1,4 @@
-import { Position } from '../Position';
+import { Position } from '../primitive/Position';
 
 export interface PathFollow {
     update(delta: number): void;

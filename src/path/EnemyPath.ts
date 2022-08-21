@@ -1,7 +1,7 @@
 import { PathFollow } from '../types/types';
-import { Position } from '../Position';
+import { Position } from '../primitive/Position';
 import { BezierCurvePath } from './BezierCurvePath';
-import { Vector } from '../Vector';
+import { Vector } from '../primitive/Vector';
 import { BezierCurveLinear } from '../bezierCurve/BezierCurveLinear';
 import { BezierCurveQuadratic } from '../bezierCurve/BezierCurveQuadratic';
 import { BezierCurveCubic } from '../bezierCurve/BezierCurveCubic';

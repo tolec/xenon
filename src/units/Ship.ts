@@ -1,6 +1,6 @@
-import Game from './Game';
+import Game from '../Game';
 import Bullet from './Bullet';
-import { Vector } from './Vector';
+import { Vector } from '../primitive/Vector';
 
 type MoveArray = number[];
 

@@ -1,11 +1,11 @@
-import Ship from './Ship';
-import Collisions from './Collisions';
-import EnemyGenerator from './EnemyGenerator';
-import StarrySky from './StarrySky';
-import Wall from './Wall';
-import PathDrawer from './path/PathDrawer';
-import RectDrawer from './RectDrawer';
-import Obstacles from './Obstacles';
+import Ship from './units/Ship';
+import Collisions from './logic/Collisions';
+import EnemyGenerator from './logic/EnemyGenerator';
+import StarrySky from './units/StarrySky';
+import Wall from './units/Wall';
+import PathDrawer from './edit/PathDrawer';
+import RectDrawer from './edit/RectDrawer';
+import Obstacles from './logic/Obstacles';
 
 type Mode = 'play' | 'rect-editor' | 'path-editor';
 

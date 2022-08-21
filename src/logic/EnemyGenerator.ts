@@ -1,6 +1,6 @@
-import Game from './Game';
-import Enemy from './Enemy';
-import { EnemyPath } from './path/EnemyPath';
+import Game from '../Game';
+import Enemy from '../units/Enemy';
+import { EnemyPath } from '../path/EnemyPath';
 
 export default class EnemyGenerator {
     private game: Game;

@@ -1,4 +1,4 @@
-import { Vector } from '../Vector';
+import { Vector } from '../primitive/Vector';
 import { PathFollow } from '../types/types';
 import { BezierCurve } from '../bezierCurve/BezierCurve';
 

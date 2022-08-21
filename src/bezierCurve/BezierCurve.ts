@@ -1,4 +1,4 @@
-import { Vector } from '../Vector';
+import { Vector } from '../primitive/Vector';
 
 export abstract class BezierCurve {
     abstract getStartPoint(): Vector;

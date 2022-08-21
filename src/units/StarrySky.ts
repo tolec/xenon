@@ -1,4 +1,4 @@
-import Game from './Game';
+import Game from '../Game';
 
 const STAR_MAX_SIZE = 4;
 

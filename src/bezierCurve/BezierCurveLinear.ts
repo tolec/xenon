@@ -1,5 +1,5 @@
 import { BezierCurve } from './BezierCurve';
-import { Vector } from '../Vector';
+import { Vector } from '../primitive/Vector';
 
 export class BezierCurveLinear extends BezierCurve {
     constructor(private A: Vector, private B: Vector) {
