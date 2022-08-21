@@ -15,7 +15,14 @@ export default class EnemyGenerator {
 
     update(delta: number) {
         this.enemies.forEach(enemy => enemy.update(delta));
-        this.enemies = this.enemies.filter(enemy => !enemy.isOver);
+
+        this.enemies = this.enemies.filter(enemy => {
+            if (enemy.isOver) {
+                enemy.destroy();
+                return false;
+            }
+            return true;
+        });
 
         if (!this.nextEnemyTime) {
             this.nextEnemyTime = this.game.timePast + 1 + Math.random() * 2;
@@ -33,6 +40,7 @@ export default class EnemyGenerator {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
+        this.enemies.forEach(enemy => enemy.path.draw(ctx));
         this.enemies.forEach(enemy => enemy.draw(ctx));
     }
 }

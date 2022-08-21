@@ -8,6 +8,7 @@ export default class Enemy {
     public isOver: boolean;
     public path: EnemyPath;
     private image?: HTMLImageElement;
+    private time: number;
 
     constructor(path: EnemyPath) {
         this.position = path.getPosition();
@@ -15,6 +16,12 @@ export default class Enemy {
         this.height = 40;
         this.isOver = false;
         this.path = path;
+        this.time = Date.now();
+    }
+
+    destroy() {
+        const liveTime = Date.now() - this.time;
+        console.log('die after ', liveTime);
     }
 
     update(delta: number) {
@@ -27,8 +34,6 @@ export default class Enemy {
     }
 
     draw(ctx: CanvasRenderingContext2D) {
-        this.path.draw(ctx);
-
         ctx.drawImage(this.getImage(), this.position.x, this.position.y, this.width, this.height);
     }
 

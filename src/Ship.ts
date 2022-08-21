@@ -26,7 +26,7 @@ export default class Ship {
         this.game = game;
         this.speedX = 250;
         this.speedY = 200;
-        this.position = new Vector(400, 300);
+        this.position = new Vector(400, 500);
         this.width = 75;
         this.height = 60;
         this.isShooting = false;

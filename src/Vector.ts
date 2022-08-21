@@ -13,6 +13,10 @@ export class Vector extends Position {
         return this.clone().addSelf(vector);
     }
 
+    subtract(vector: Vector) {
+        return this.clone().subtractSelf(vector);
+    }
+
     multiply(value: number) {
         return this.clone().multiplySelf(value);
     }
@@ -20,6 +24,13 @@ export class Vector extends Position {
     addSelf(vector: Vector) {
         this.x += vector.x;
         this.y += vector.y;
+
+        return this;
+    }
+
+    subtractSelf(vector: Vector) {
+        this.x -= vector.x;
+        this.y -= vector.y;
 
         return this;
     }

@@ -1,7 +1,8 @@
 import { Vector } from '../Vector';
 import { PathFollow } from '../types/types';
+import { BezierCurve } from '../bezierCurve/BezierCurve';
 
-const SPEED = 0.5;
+const SPEED = 200;
 
 export class BezierCurvePath implements PathFollow {
     private t = 0;
@@ -14,7 +15,9 @@ export class BezierCurvePath implements PathFollow {
     }
 
     update(delta: number): void {
-        this.t += delta * SPEED;
+        const curveDt = this.bezierCurveList[this.currCurveIndex].calcLinearDeltaTime(this.t, delta * SPEED);
+
+        this.t += curveDt;
 
         if (this.t > 1) {
             this.currCurveIndex += 1;
@@ -55,91 +58,5 @@ export class BezierCurvePath implements PathFollow {
         }
 
         ctx.fill();
-    }
-}
-
-export abstract class BezierCurve {
-    abstract getStartPoint(): Vector;
-    abstract getEndPoint(): Vector;
-    abstract calcPosition(t: number): Vector;
-}
-
-export class BezierCurveLinear extends BezierCurve {
-    constructor(private p0: Vector, private p1: Vector) {
-        super();
-    }
-
-    getStartPoint(): Vector {
-        return this.p0;
-    }
-
-    getEndPoint(): Vector {
-        return this.p1;
-    }
-
-    calcPosition(t: number): Vector {
-        const x = this.formula(t, this.p0.x, this.p1.x);
-        const y = this.formula(t, this.p0.y, this.p1.y);
-
-        return new Vector(x, y);
-    }
-
-    formula(t: number, p0: number, p1: number) {
-        return (1 - t) * p0 + t * p1;
-    }
-}
-
-export class BezierCurveQuadratic extends BezierCurve {
-    constructor(private p0: Vector, private p1: Vector, private p2: Vector) {
-        super();
-    }
-
-    getStartPoint(): Vector {
-        return this.p0;
-    }
-
-    getEndPoint(): Vector {
-        return this.p2;
-    }
-
-    calcPosition(t: number): Vector {
-        const x = this.formula(t, this.p0.x, this.p1.x, this.p2.x);
-        const y = this.formula(t, this.p0.y, this.p1.y, this.p2.y);
-
-        return new Vector(x, y);
-    }
-
-    formula(t: number, p0: number, p1: number, p2: number) {
-        return Math.pow(1 - t, 2) * p0 + 2 * (1 - t) * t * p1 + Math.pow(t, 2) * p2;
-    }
-}
-
-export class BezierCurveCubic extends BezierCurve {
-    constructor(private p0: Vector, private p1: Vector, private p2: Vector, private p3: Vector) {
-        super();
-    }
-
-    getStartPoint(): Vector {
-        return this.p0;
-    }
-
-    getEndPoint(): Vector {
-        return this.p3;
-    }
-
-    calcPosition(t: number): Vector {
-        const x = this.formula(t, this.p0.x, this.p1.x, this.p2.x, this.p3.x);
-        const y = this.formula(t, this.p0.y, this.p1.y, this.p2.y, this.p3.y);
-
-        return new Vector(x, y);
-    }
-
-    formula(t: number, p0: number, p1: number, p2: number, p3: number) {
-        return (
-            Math.pow(1 - t, 3) * p0 +
-            3 * Math.pow(1 - t, 2) * t * p1 +
-            3 * (1 - t) * Math.pow(t, 2) * p2 +
-            Math.pow(t, 3) * p3
-        );
     }
 }
